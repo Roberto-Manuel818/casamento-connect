@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="max-w-7xl mx-auto mt-12 space-y-10">
+
+    <!-- Saudação -->
+    <div class="text-center">
+        <h2 class="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+            Olá, {{ convidado.nome_convidado}}
+        </h2>
+
+        {% if convidado.status == 'AC' %}
+        <p class="mt-2 text-lg text-gray-700">
+            Confirme sua presença no casamento:
+        </p>
+        <div class="mt-4 flex justify-center gap-4">
+            <a href="{% url 'responder_presenca' %}?resposta=C&token={{ convidado.token}}"
+               class="rounded-md bg-green-500 px-4 py-2 text-white font-semibold hover:bg-green-600 focus:ring focus:ring-green-300"
+               aria-label="Confirmar presença no casamento">
+               Confirmar
+            </a>
+            <a href="{% url 'responder_presenca' %}?resposta=R&token={{ convidado.token}}"
+               class="rounded-md bg-red-500 px-4 py-2 text-white font-semibold hover:bg-red-600 focus:ring focus:ring-red-300"
+               aria-label="Recusar presença no casamento">
+               Recusar
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <hr class="border-gray-300">
+
+    <!-- Feedback de ações -->
+    {% if messages %}
+    <div class="p-4 rounded-md bg-green-100 text-green-800" role="alert" aria-live="polite">
+        {% for message in messages %}
+        <p>{{ message}}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Presentes -->
+    <section aria-labelledby="secao-presentes">
+        <h2 id="secao-presentes" class="text-2xl font-semibold text-gray-900">
+            Escolha um presente para os noivos
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6 gap-6">
+            {% for presente in presentes %}
+            <div class="border p-4 rounded-lg shadow-sm bg-white">
+                {% if presente.foto %}
+                <img src="{{ presente.foto.url}}"
+                     class="aspect-[3/2] w-full rounded-md object-cover"
+                     alt="Imagem ilustrativa do presente {{ presente.nome_presente}}">
+                {% endif %}
+
+                <h3 class="mt-2 text-lg font-semibold text-gray-900">
+                    {{ presente.nome_presente}}
+                </h3>
+
+                {% if presente.reservado_por %}
+                    <p class="mt-2 text-sm text-gray-400 italic">
+                        🎁 Já reservado por {{ presente.reservado_por.nome_convidado}}
+                    </p>
+                {% else %}
+                    <a href="{% url 'reservar_presente' presente.id %}?token={{ convidado.token}}"
+                       class="block mt-4 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold py-2 px-4 rounded text-center"
+                       aria-label="Reservar o presente {{ presente.nome_presente}}">
+                        Reservar Presente
+                    </a>
+                {% endif %}
+
+                {% if presente.importancia <= 2 %}
+                    <span class="mt-1 inline-block text-xs font-medium text-green-600 bg-green-100 rounded px-2 py-0.5">
+                        Pouco Importante
+                    </span>
+                {% elif presente.importancia < 4 %}
+                    <span class="mt-1 inline-block text-xs font-medium text-orange-600 bg-orange-100 rounded px-2 py-0.5">
+                        Moderadamente Importante
+                    </span>
+                {% else %}
+                <span class="mt-1 inline-block text-xs font-medium text-red-600 bg-red-100 rounded px-2 py-0.5">
+                        Muito Importante
+                    </span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <hr class="border-gray-300">
+
+    <!-- Acompanhantes -->
+    <section aria-labelledby="secao-acompanhantes">
+        <h2 id="secao-acompanhantes" class="text-2xl font-semibold text-gray-900 text-center">
+            Adicione seus acompanhantes
+        </h2>
+
+        <!-- Exibe acompanhantes existentes -->
+        <div class="mt-6 text-center">
+            <ul class="list-disc inline-block text-left">
+                {% if convidado.acompanhantes.all %}
+                    {% for acompanhante in convidado.acompanhantes.all %}
+                        <li class="text-gray-700 text-sm">{{ acompanhante.nome}}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="text-gray-500 italic text-sm">Nenhum acompanhante cadastrado</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Formulário de cadastro de acompanhantes -->
+<form action="" method="POST"
+      class="max-w-lg mx-auto mt-6 bg-slate-200/20 p-6 rounded-md ring-1 ring-gray-300 shadow-md">
+    {% csrf_token %}
+
+    <label for="nome_acompanhante" class="block text-sm font-medium text-gray-700">
+        Nome do acompanhante
+    </label>
+    <input type="text"
+           id="nome_acompanhante"
+           name="acompanhantes"
+           required
+           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-3 py-2"
+           aria-describedby="descricao-nome">
+    <span id="descricao-nome" class="text-xs text-gray-500">
+        Digite o nome completo do acompanhante.
+    </span>
+
+    <input type="submit"
+           value="Adicionar"
+           class="mt-4 w-full bg-indigo-500 text-white font-semibold py-2 rounded hover:bg-indigo-600 focus:ring focus:ring-indigo-300"
+           aria-label="Adicionar acompanhante">
+</form>
+    </section>
+
+    <div class="text-center mt-10">
+        <a href="{% url 'home' %}"
+           class="text-sm text-gray-600 hover:underline"
+           aria-label="Voltar para o início">
+           ← Voltar para o início
+        </a>
+    </div>
+</div>
+{% endblock %}

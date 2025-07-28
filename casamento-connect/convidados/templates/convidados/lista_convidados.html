@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="max-w-7xl mx-auto mt-12">
+  <div class="grid gap-4 grid-cols-2">
+
+    <!-- Formulário de Cadastro -->
+    <div class="bg-slate-200/20 p-6 rounded-md">
+      <form action="{% url 'lista_convidados' %}" method="POST" aria-label="Formulário de cadastro de convidados">
+        {% csrf_token %}
+        <h2 class="text-xl font-semibold text-gray-900">Cadastre seus convidados</h2><br>
+
+        <label for="nome_convidado" class="block text-sm text-gray-900">Nome do convidado</label>
+        <input id="nome_convidado" name="nome_convidado" type="text" required class="block w-full px-3 py-2 rounded ring-1 ring-gray-300">
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="whatsapp" class="block text-sm text-gray-900">WhatsApp</label>
+            <input id="whatsapp" name="whatsapp" type="tel" required class="block w-full px-3 py-2 rounded ring-1 ring-gray-300">
+          </div>
+          <div>
+            <label for="maximo_acompanhantes" class="block text-sm text-gray-900">Máximo de acompanhantes</label>
+            <input id="maximo_acompanhantes" name="maximo_acompanhantes" type="number" min="0" required class="block w-full px-3 py-2 rounded ring-1 ring-gray-300">
+          </div>
+        </div>
+
+        <input type="submit" value="Cadastrar" class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
+      </form>
+    </div>
+
+    <!-- Lista de Convidados -->
+    <div>
+      <ul role="list" class="divide-y divide-gray-100" aria-label="Lista de convidados">
+        {% for convidado in convidados %}
+        <li class="py-5">
+          <div class="flex items-start gap-x-6">
+            <img class="h-12 w-12 rounded-full bg-gray-50" src="{% static 'noivos/img/default.png' %}" alt="Foto do convidado">
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-gray-900">{{ convidado.nome_convidado}}</p>
+              <p class="text-xs text-gray-500">WhatsApp: {{ convidado.whatsapp}}</p>
+              <p class="text-xs text-gray-500">
+                Link:
+                <a href="{{ convidado.link_convite}}" class="text-indigo-600 hover:underline" target="_blank">
+                  {{ convidado.link_convite}}
+                </a>
+              </p>
+
+              <!-- Acompanhantes -->
+              <div class="mt-2 text-xs text-gray-700">
+                <strong>Acompanhantes:</strong>
+                <ul class="list-disc ml-5">
+                  {% if convidado.acompanhantes.all %}
+                    {% for acompanhante in convidado.acompanhantes.all %}
+                      <li>{{ acompanhante.nome}}</li>
+                    {% endfor %}
+                  {% else %}
+                    <li><em>Sem acompanhantes cadastrados</em></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <span class="inline-block mt-2 rounded px-2 py-1 text-xs font-medium ring-1 ring-inset
+            {% if convidado.status == 'AC' %}text-green-500 bg-green-100 ring-green-300
+            {% elif convidado.status == 'C' %}text-blue-500 bg-blue-100 ring-blue-300
+            {% else %}text-red-500 bg-red-100 ring-red-300{% endif %}">
+            {{ convidado.get_status_display}}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
