@@ -4,33 +4,27 @@
         <div class="flex items-center justify-between h-16">
 
             <div class="flex items-center">
-                <!-- Logotipo -->
                 <div class="flex-shrink-0">
                     <img class="h-8 w-auto rounded-md" src="{% static 'noivos/img/logo.jpg' %}" alt="Logotipo do site">
                 </div>
 
-                <!-- Menu de navegação -->
                 <div class="hidden sm:ml-6 sm:flex space-x-4">
                     {% if tipo_usuario == "admin" %}
                         <a href="{% url 'lista_convidados' %}"
-                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white"
-                           aria-label="Ir para a lista geral de convidados">
+                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">
                            Lista de Convidados
                         </a>
                         <a href="{% url 'home' %}"
-                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white"
-                           aria-label="Ver a lista de presentes dos noivos">
+                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">
                            Lista de Presentes
                         </a>
                     {% else %}
                         <a href="{% url 'convidados' %}?token={{ convidado.token}}"
-                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white"
-                           aria-label="Acessar sua página pessoal como convidado">
+                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">
                            Minha Página
                         </a>
-                        <a href="{% url 'home' %}"
-                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white"
-                           aria-label="Escolher presentes para os noivos">
+                        <a href="{% url 'home' %}?token={{ convidado.token}}"
+                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-700 hover:text-white">
                            Presentes
                         </a>
                     {% endif %}

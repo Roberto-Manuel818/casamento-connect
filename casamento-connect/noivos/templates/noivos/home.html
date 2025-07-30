@@ -6,63 +6,64 @@
         <div class="bg-slate-200/20 p-6 rounded-md">
             <h2 class="text-xl font-semibold tracking-tight text-gray-900" id="titulo-cadastro">Crie sua lista de presentes</h2>
             <br>
-            <form action="{% url 'home' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="token" value="{{ token }}">
-                <div aria-live="assertive">
-                    {% if messages %}
-                    <ul class="text-red-500">
-                        {% for message in messages %}
-                        <li tabindex="0" class="error-message">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </div>
+            <form action="{% url 'home' %}?token={{ token}}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="token" value="{{ token}}">
 
-                <label for="nome_presente" class="mt-4 block text-sm leading-6 text-gray-900">Nome do presente</label>
-                <input type="text" id="nome_presente" name="nome_presente" required autofocus
-                       class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
-                       aria-labelledby="descricao-nome-presente">
-                <span id="descricao-nome-presente" class="text-xs text-gray-500">Digite o nome do presente desejado.</span>
+    <div aria-live="assertive">
+        {% if messages %}
+        <ul class="text-red-500">
+            {% for message in messages %}
+            <li tabindex="0" class="error-message">{{ message}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
 
-                <div class="flex space-x-4">
-                    <div class="w-full">
-                        <label for="foto" class="mt-4 block text-sm leading-6 text-gray-900">Foto de exemplo</label>
-                        <input type="file" id="foto" name="foto" required
-                               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
-                               aria-labelledby="descricao-foto">
-                        <span id="descricao-foto" class="text-xs text-gray-500">Selecione uma imagem ilustrativa do presente.</span>
-                    </div>
-                    <div class="w-full">
-                        <label for="preco" class="mt-4 block text-sm leading-6 text-gray-900">Preço estimado</label>
-                        <input type="number" id="preco" name="preco" required min="1"
-                               class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
-                               aria-labelledby="descricao-preco">
-                        <span id="descricao-preco" class="text-xs text-gray-500">Informe o preço estimado do presente.</span>
-                    </div>
-                </div>
+    <label for="nome_presente" class="mt-4 block text-sm leading-6 text-gray-900">Nome do presente</label>
+    <input type="text" id="nome_presente" name="nome_presente" required autofocus
+           class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
+           aria-labelledby="descricao-nome-presente">
+    <span id="descricao-nome-presente" class="text-xs text-gray-500">Digite o nome do presente desejado.</span>
 
-                <div class="flex space-x-4">
-                    <div class="w-full">
-                        <label for="importancia" class="mt-4 block text-sm leading-6 text-gray-900">Importância</label>
-                        <input type="range" id="importancia" min="1" max="5" name="importancia" required
-                               class="block w-full py-3 text-gray-900" aria-labelledby="descricao-importancia">
-                        <span id="descricao-importancia" class="text-xs text-gray-500">Defina o nível de prioridade do presente.</span>
-                    </div>
-                    <div class="w-full">
-                        <input type="submit" value="Adicionar Presente"
-                               class="rounded-md w-full mt-4 bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600"
-                               aria-label="Adicionar um novo presente à lista">
-                    </div>
-                </div>
+    <div class="flex space-x-4">
+        <div class="w-full">
+            <label for="foto" class="mt-4 block text-sm leading-6 text-gray-900">Foto de exemplo</label>
+            <input type="file" id="foto" name="foto" required
+                   class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
+                   aria-labelledby="descricao-foto">
+            <span id="descricao-foto" class="text-xs text-gray-500">Selecione uma imagem ilustrativa do presente.</span>
+        </div>
+        <div class="w-full">
+            <label for="preco" class="mt-4 block text-sm leading-6 text-gray-900">Preço estimado</label>
+            <input type="number" id="preco" name="preco" required min="1"
+                   class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
+                   aria-labelledby="descricao-preco">
+            <span id="descricao-preco" class="text-xs text-gray-500">Informe o preço estimado do presente.</span>
+        </div>
+    </div>
 
-                <div class="mt-6 text-center">
-                    <a href="/convidados/?token={{ token }}"
-                       class="inline-block bg-gray-100 hover:bg-gray-200 text-sm text-gray-700 px-4 py-2 rounded font-medium transition">
-                       Ver meus presentes
-                    </a>
-                </div>
-            </form>
+    <div class="flex space-x-4">
+        <div class="w-full">
+            <label for="importancia" class="mt-4 block text-sm leading-6 text-gray-900">Importância</label>
+            <input type="range" id="importancia" min="1" max="5" name="importancia" required
+                   class="block w-full py-3 text-gray-900" aria-labelledby="descricao-importancia">
+            <span id="descricao-importancia" class="text-xs text-gray-500">Defina o nível de prioridade do presente.</span>
+        </div>
+        <div class="w-full">
+            <input type="submit" value="Adicionar Presente"
+                   class="rounded-md w-full mt-4 bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600"
+                   aria-label="Adicionar um novo presente à lista">
+        </div>
+    </div>
+
+    <div class="mt-6 text-center">
+        <a href="/convidados/?token={{ token}}"
+           class="inline-block bg-gray-100 hover:bg-gray-200 text-sm text-gray-700 px-4 py-2 rounded font-medium transition">
+           Ver meus presentes
+        </a>
+    </div>
+</form>
         </div>
 
         <div class="mx-auto">

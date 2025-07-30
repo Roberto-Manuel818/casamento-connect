@@ -108,9 +108,10 @@
         </div>
 
         <!-- Formulário de cadastro de acompanhantes -->
-<form action="" method="POST"
+<form action="?token={{ token}}" method="POST"
       class="max-w-lg mx-auto mt-6 bg-slate-200/20 p-6 rounded-md ring-1 ring-gray-300 shadow-md">
     {% csrf_token %}
+    <input type="hidden" name="token" value="{{ token}}">  <!-- Campo oculto para reforçar -->
 
     <label for="nome_acompanhante" class="block text-sm font-medium text-gray-700">
         Nome do acompanhante
